@@ -18,28 +18,38 @@ not been merged.
 
 ### Setting up your local environment
 1. Clone the repository to your local machine.
+
     ```
     cd <clone location>
     git clone https://github.com/project-orbital/backend
     ```
+
 2. Install the NodeJS dependencies.
+
     ```
     cd backend
     npm install
     ```
+
 3. Get the URI to your MongoDB database. It should look similar to the following:
+
     ```
     mongodb+srv://<username>:<password>@cluster0-qjvjg.mongodb.net/test?retryWrites=true&w=majority
     ```
+
 4. Set up the development secrets by replacing the values in `.env`.
+
     ```
     cp .env.example .env
     vim .env
     ```
+
 5. Start the server on your local machine.
+
     ```
     nodemon start
     ```
+
 6. Open a new tab in your browser and navigate to http://localhost:4000.
    No API calls are currently implemented, but if the frontend is also hosted locally,
    you should be able to sign up and sign in at http://localhost:3000.
