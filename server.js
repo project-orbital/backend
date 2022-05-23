@@ -47,20 +47,6 @@ require("./passportConfig")(passport);
 
 // ===
 // Routes
-app.post("/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-        if (err) throw err;
-        if (!user) res.send("Invalid username/password.");
-        else {
-            req.logIn(user, (err) => {
-                if (err) throw err;
-                res.send("Sign in successful.");
-                console.log(req.user);
-            });
-        }
-    })(req, res, next);
-});
-
 app.post("/sign-up", (req, res) => {
     User.findOne({username: req.body.username}, async (err, doc) => {
         if (err) throw err;
@@ -78,10 +64,6 @@ app.post("/sign-up", (req, res) => {
             res.send("Signed up successfully.");
         }
     });
-});
-
-app.get("/user", (req, res) => {
-    res.send(req.user);
 });
 
 // ===
