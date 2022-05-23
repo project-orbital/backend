@@ -61,18 +61,21 @@ app.post("/login", (req, res, next) => {
     })(req, res, next);
 });
 
-app.post("/register", (req, res) => {
+app.post("/sign-up", (req, res) => {
     User.findOne({username: req.body.username}, async (err, doc) => {
         if (err) throw err;
-        if (doc) res.send("User already exists.");
+        if (doc) res.send("Username already exists.");
         if (!doc) {
             const hashedPassword = await bcrypt.hash(req.body.password, 10);
             const newUser = new User({
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                email: req.body.email,
                 username: req.body.username,
                 password: hashedPassword,
             });
             await newUser.save();
-            res.send("Sign up successful.");
+            res.send("Signed up successfully.");
         }
     });
 });
