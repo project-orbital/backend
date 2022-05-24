@@ -66,8 +66,9 @@ app.post("/sign-in", (req, res, next) => {
 app.post("/sign-up", (req, res) => {
     User.findOne({username: req.body.username}, async (err, doc) => {
         if (err) throw err;
-        if (doc) res.send("Username already exists.");
-        if (!doc) {
+        // https://stackoverflow.com/questions/26587082/http-status-code-for-username-already-exists-when-registering-new-account
+        if (doc) res.status(409).send("Username already exists.");
+        else {
             const hashedPassword = await bcrypt.hash(req.body.password, 10);
             const newUser = new User({
                 firstName: req.body.firstName,
