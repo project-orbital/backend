@@ -51,5 +51,4 @@ not been merged.
     ```
 
 6. Open a new tab in your browser and navigate to http://localhost:4000.
-   No API calls are currently implemented, but if the frontend is also hosted locally,
-   you should be able to sign up at http://localhost:3000.
+   You should be able to sign up at http://localhost:3000/sign-up and sign in at http://localhost:3000/sign-in.
