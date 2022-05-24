@@ -8,7 +8,7 @@ branch of the frontend.
 It is not guaranteed to work with the frontend, especially if frontend changes have
 not been merged.
 
-`feature-*` branches are topic branches for specific feature development.
+`x-<feature name>` branches are topic branches for specific feature development.
 
 ## Developer Setup
 
