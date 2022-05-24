@@ -52,7 +52,7 @@ require("./passportConfig")(passport);
 app.post("/sign-in", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
         if (err) throw err;
-        if (!user) res.send("Incorrect username/password.");
+        if (!user) res.status(401).send("Incorrect username/password.");
         else {
             req.logIn(user, (err) => {
                 if (err) throw err;
