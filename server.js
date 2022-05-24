@@ -11,6 +11,8 @@ const session = require("express-session");
 const User = require("./user");
 const app = express();
 
+// === === ===
+// Database.
 require("dotenv").config();
 mongoose.connect(
     process.env.DATABASE_URI,
@@ -23,7 +25,7 @@ mongoose.connect(
     }
 );
 
-// ===
+// === === ===
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -45,8 +47,22 @@ app.use(passport.initialize());
 app.use(passport.session());
 require("./passportConfig")(passport);
 
-// ===
+// === === ===
 // Routes
+app.post("/sign-in", (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+        if (err) throw err;
+        if (!user) res.send("Incorrect username/password.");
+        else {
+            req.logIn(user, (err) => {
+                if (err) throw err;
+                res.send("Signed in successfully.");
+                console.log(req.user);
+            });
+        }
+    })(req, res, next);
+});
+
 app.post("/sign-up", (req, res) => {
     User.findOne({username: req.body.username}, async (err, doc) => {
         if (err) throw err;
