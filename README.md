@@ -47,8 +47,8 @@ not been merged.
 5. Start the server on your local machine.
 
     ```
-    nodemon start
+    nodemon server
     ```
 
 6. Open a new tab in your browser and navigate to http://localhost:4000.
-   You should be able to sign up at http://localhost:3000/sign-up and sign in at http://localhost:3000/sign-in.
+   If the [frontend](https://github.com/project-orbital/frontend) is up and running, you should be able to sign up at http://localhost:3000/sign-up and sign in at http://localhost:3000/sign-in.
