@@ -8,6 +8,9 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 
+const https = require("https");
+const fs = require("fs");
+
 const User = require("./user");
 const app = express();
 
@@ -31,7 +34,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(
     cors({
-        origin: "http://localhost:3000", // <-- location of the react app were connecting to
+        origin: process.env.FRONTEND,
         credentials: true,
     })
 );
@@ -85,6 +88,23 @@ app.post("/sign-up", (req, res) => {
 
 // ===
 // Server
-app.listen(4000, () => {
-    console.log("Server started on port 4000.");
-});
+if (process.env.NODE_ENV === "production") {
+    const privateKey = fs.readFileSync(process.env.PRIVATE_KEY_PATH, "utf8");
+    const certificate = fs.readFileSync(process.env.CERTIFICATE_PATH, "utf8");
+    const ca = fs.readFileSync(process.env.CHAIN_PATH, "utf8");
+
+    const credentials = {
+        key: privateKey,
+        cert: certificate,
+        ca: ca
+    };
+
+    const httpsServer = https.createServer(credentials, app);
+    httpsServer.listen('8443', () => {
+        console.log("Server started at https://dollarplanner.live:8443.");
+    });
+} else {
+    app.listen(4000, () => {
+        console.log("Server started on port 4000.");
+    });
+}
