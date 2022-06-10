@@ -83,6 +83,15 @@ app.post("/sign-up", (req, res) => {
     });
 });
 
+const add = require('./parser/pkg');
+const multer = require('multer');
+app.post('/api/upload',
+    multer().array('files'),
+    (req, res, next) => {
+        console.log(add.add(5, 5));
+    }
+);
+
 // ===
 // Server
 app.listen(4000, () => {
