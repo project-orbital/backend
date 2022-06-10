@@ -1,5 +1,5 @@
 #!/bin/sh
-BRANCH="${1:=dev}"
+BRANCH="${1:-dev}"
 
 echo "Updating Git submodules from branch \`$BRANCH\`..."
 git submodule update
@@ -11,5 +11,14 @@ echo "Compiling parser to .wasm..."
 cd parser || exit
 wasm-pack build --target nodejs
 echo "Parser compiled."
+
+if [ $BRANCH = dev ]
+then
+  echo "Starting server using nodemon..."
+  npm start
+else
+  echo "Starting server using pm2..."
+  pm2 start ~/backend/server.js
+fi
 
 exit

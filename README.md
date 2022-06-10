@@ -43,19 +43,13 @@ not been merged.
     cp .env.example .env
     vim .env
     ```
-   
-5. Run the `update.sh` script to automatically update and compile the parser submodule which is written in Rust.
-   The targeted submodule branch defaults to `dev` if unspecified. Otherwise, append the desired branch name, e.g. `master` for deployment to production.
 
-   ```
-   sh update.sh
-   ```
-
-7. Start the server on your local machine.
+5. Start the server on your local machine.
 
     ```
-    nodemon server
+    chmod +x start.sh
+    ./start.sh
     ```
 
-8. Open a new tab in your browser and navigate to http://localhost:4000.
+6. Open a new tab in your browser and navigate to http://localhost:4000.
    If the [frontend](https://github.com/project-orbital/frontend) is up and running, you should be able to sign up at http://localhost:3000/sign-up and sign in at http://localhost:3000/sign-in.
