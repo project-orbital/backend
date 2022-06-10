@@ -90,7 +90,7 @@ app.post('/api/upload',
     multer().array('files'),
     (req, res, next) => {
         extractor.extract(req.files)
-            .then(arr => arr.map(parser.parse))
+            .then(parser.parse)
             .then(console.log)
             .catch(console.log);
     }
