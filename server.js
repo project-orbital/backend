@@ -83,12 +83,16 @@ app.post("/sign-up", (req, res) => {
     });
 });
 
-const add = require('./parser/pkg');
 const multer = require('multer');
+const extractor = require('./utils/pdf')
+const parser = require('./parser/pkg');
 app.post('/api/upload',
     multer().array('files'),
     (req, res, next) => {
-        console.log(add.add(5, 5));
+        extractor.extract(req.files)
+            .then(arr => arr.map(parser.parse))
+            .then(console.log)
+            .catch(console.log);
     }
 );
 
