@@ -86,13 +86,14 @@ app.post("/sign-up", (req, res) => {
 const multer = require('multer');
 const extractor = require('./utils/pdf')
 const parser = require('./parser/pkg');
-app.post('/api/upload',
-    multer().array('files'),
-    (req, res, next) => {
-        extractor.extract(req.files)
+app.post('/api/upload', multer().array('files'), async (req, res, next) => {
+        const json = await extractor.extract(req.files)
             .then(parser.parse)
-            .then(console.log)
-            .catch(console.log);
+            .catch(err => {
+                console.log(err);
+                return "[]";
+            });
+        res.send(json);
     }
 );
 
