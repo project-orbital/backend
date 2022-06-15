@@ -174,13 +174,11 @@ const sendVerificationEmail = ({_id, email}, res) => {
             message: "An error occured while hashing mail data",
         })
     });
-
-
 }
 
 //verify email
 app.get("/email-sent/:userId/:uniqueString", (req, res) => {
-    let {userId, uniqueString} = req.params;
+    let { userId, uniqueString } = req.params;
 
     UserVerification
     .find({userId})
