@@ -4,7 +4,6 @@
 # https://github.com/expressjs/express/blob/master/.gitignore
 # npm
 node_modules
-package-lock.json
 *.log
 *.gz
 
