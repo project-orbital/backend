@@ -46,10 +46,11 @@ not been merged.
     vim .env
     ```
 
-5. Start the server on your local machine.
+5. Start the server on your local machine. Use `master` for deployment to production. Otherwise, the script defaults to `dev`.
 
     ```
-    nodemon server
+    chmod +x start.sh
+    ./start.sh <master/dev>
     ```
 
 6. Open a new tab in your browser and navigate to http://localhost:4000.
