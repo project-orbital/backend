@@ -17,11 +17,9 @@ require("dotenv").config();
 //for email verification
 //email handler
 const nodemailer = require("nodemailer");
+
 //path for static verified page
-const path = require('path');
 const { v4: uuidv4 } = require("uuid");
-const res = require("express/lib/response");
-const { Router } = require("express");
 const PasswordReset = require("./PasswordReset");
 
 //Nodemailer stuff.
