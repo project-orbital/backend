@@ -8,8 +8,8 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 
-const User = require("./user");
-const UserVerification = require("./userVerification");
+const User = require("./models/user");
+const UserVerification = require("./models/userVerification");
 const app = express();
 
 require("dotenv").config();
@@ -17,12 +17,10 @@ require("dotenv").config();
 //for email verification
 //email handler
 const nodemailer = require("nodemailer");
+
 //path for static verified page
-const path = require('path');
-const { v4: uuidv4 } = require("uuid");
-const res = require("express/lib/response");
-const { Router } = require("express");
-const PasswordReset = require("./PasswordReset");
+const {v4: uuidv4} = require("uuid");
+const PasswordReset = require("./models/passwordReset");
 
 //Nodemailer stuff.
 let transporter = nodemailer.createTransport({
@@ -57,7 +55,7 @@ mongoose.connect(
 // === === ===
 // Middleware
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(
     cors({
         origin: "http://localhost:3000", // <-- location of the react app were connecting to
@@ -97,7 +95,7 @@ app.post("/sign-in", (req, res, next) => {
 
 app.post("/sign-up", (req, res) => {
     const email = req.body.email;
-    User.find({ email })
+    User.find({email})
         .then((result) => {
             if (result.length) {
                 //the username alr exists
@@ -128,7 +126,7 @@ app.post("/sign-up", (req, res) => {
         })
 });
 
-const sendVerificationEmail = ({ _id, email }, res) => {
+const sendVerificationEmail = ({_id, email}, res) => {
     //url to be used in the email
     const currentUrl = "http://localhost:3000/"
     const uniqueString = uuidv4() + _id;
@@ -139,7 +137,7 @@ const sendVerificationEmail = ({ _id, email }, res) => {
         html: `<p>Verify your email address to complete the signup and login to your account.</p>
                 <p>This link expires in 6 hours.</p>
                 <p>Click <a href = ${currentUrl + "verify/" + _id + "/" + uniqueString
-            }>here</a> to verify.</p>`,
+        }>here</a> to verify.</p>`,
     };
 
     const saltRounds = 10;
@@ -187,20 +185,20 @@ app.post("/verify", (req, res) => {
     let uniqueString = req.body.uniqueString;
 
     UserVerification
-        .find({ userId })
+        .find({userId})
         .then((result) => {
             if (result.length > 0) {
                 //success
-                const { dateExpired } = result[0];
+                const {dateExpired} = result[0];
                 const hashedUniqueString = result[0].uniqueString;
 
                 if (dateExpired < Date.now()) {
                     //record expired
                     UserVerification
-                        .deleteOne({ userId })
+                        .deleteOne({userId})
                         .then((result) => {
                             User
-                                .deleteOne({ _id: userId })
+                                .deleteOne({_id: userId})
                                 .then(() => {
                                     let message = "Your verification link has expired";
                                     res.send(message);
@@ -217,10 +215,10 @@ app.post("/verify", (req, res) => {
                         .then(result => {
                             if (result) {
                                 User
-                                    .updateOne({ _id: userId }, { verified: true })
+                                    .updateOne({_id: userId}, {verified: true})
                                     .then(() => {
                                         UserVerification
-                                            .deleteOne({ userId })
+                                            .deleteOne({userId})
                                             .then(() => {
                                                 console.log("Email verified.");
                                                 let message = "Your email has been verified.";
@@ -266,7 +264,7 @@ app.post("/request-password-reset", (req, res) => {
 
     //check if email exists
     User
-        .find({ email })
+        .find({email})
         .then((data) => {
             if (data.length) {
                 //user exists
@@ -286,12 +284,12 @@ app.post("/request-password-reset", (req, res) => {
             console.log(error);
         })
 
-    const sendResetEmail = ({ _id, email }, res) => {
+    const sendResetEmail = ({_id, email}, res) => {
         const resetString = uuidv4() + _id;
         const currentUrl = "http://localhost:3000/"
 
         //clear all existing reset records
-        PasswordReset.deleteMany({ userId: _id })
+        PasswordReset.deleteMany({userId: _id})
             .then(result => {
                 //mail options
                 const mailOptions = {
@@ -301,7 +299,7 @@ app.post("/request-password-reset", (req, res) => {
                     html: `
                     <p>This link expires in 60 minutes.</p>
                     <p>Click <a href = ${currentUrl + "reset-password/" + _id + "/" + resetString
-                        }>here</a> to reset your password.</p>`,
+                    }>here</a> to reset your password.</p>`,
                 };
 
                 //hash the reset string
@@ -363,16 +361,16 @@ app.post("/reset-password", (req, res) => {
     let newPassword = req.body.password;
 
     PasswordReset
-        .find({ userId })
+        .find({userId})
         .then(result => {
             if (result.length > 0) {
                 //password reset record exists
-                const { dateExpired } = result[0];
+                const {dateExpired} = result[0];
                 const hashedResetString = result[0].resetString;
 
                 if (dateExpired < Date.now()) {
                     PasswordReset
-                        .deleteOne({ userId })
+                        .deleteOne({userId})
                         .then(() => {
                             let message = "Password reset link has expired.";
                             res.status(500).send(message);
@@ -396,11 +394,11 @@ app.post("/reset-password", (req, res) => {
                                     .then(hashedNewPassword => {
                                         // update user password
                                         User
-                                            .updateOne({ _id: userId }, { password: hashedNewPassword })
+                                            .updateOne({_id: userId}, {password: hashedNewPassword})
                                             .then(() => {
                                                 //update complete. now delete reset record
                                                 PasswordReset
-                                                    .deleteOne({ userId })
+                                                    .deleteOne({userId})
                                                     .then(() => {
                                                         let message = "Password has been reset successfully";
                                                         res.send(message);
@@ -447,16 +445,16 @@ app.post("/reset-password", (req, res) => {
 })
 const multer = require('multer');
 const extractor = require('./utils/pdf')
-const parser = require('./parser/pkg');
+const parser = require('../parser/pkg');
 app.post('/api/upload', multer().array('files'), async (req, res, next) => {
-    const json = await extractor.extract(req.files)
-        .then(parser.parse)
-        .catch(err => {
-            console.log(err);
-            return "[]";
-        });
-    res.send(json);
-}
+        const json = await extractor.extract(req.files)
+            .then(parser.parse)
+            .catch(err => {
+                console.log(err);
+                return "[]";
+            });
+        res.send(json);
+    }
 );
 
 // ===

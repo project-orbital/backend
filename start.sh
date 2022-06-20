@@ -18,7 +18,7 @@ then
   npm start
 else
   echo "Starting server using pm2..."
-  pm2 start ~/backend/server.js
+  pm2 start ~/backend/src/server.js
 fi
 
 exit
