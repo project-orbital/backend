@@ -20,7 +20,7 @@ const nodemailer = require("nodemailer");
 
 //path for static verified page
 const { v4: uuidv4 } = require("uuid");
-const PasswordReset = require("./PasswordReset");
+const PasswordReset = require("./passwordReset");
 
 //Nodemailer stuff.
 let transporter = nodemailer.createTransport({
