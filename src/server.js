@@ -447,7 +447,7 @@ app.post("/reset-password", (req, res) => {
 })
 const multer = require('multer');
 const extractor = require('./utils/pdf')
-const parser = require('./parser/pkg');
+const parser = require('../parser/pkg');
 app.post('/api/upload', multer().array('files'), async (req, res, next) => {
     const json = await extractor.extract(req.files)
         .then(parser.parse)
