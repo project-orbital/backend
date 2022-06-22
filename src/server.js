@@ -19,11 +19,11 @@ app.use(
     })
 );
 app.use(passport.initialize());
-app.use(passport.session());
 
 // Routes
-app.use("/sign-in", require("./routes/signIn"));
-app.use("/sign-up", require("./routes/signUp"));
+app.use("/users/sign-in", require("./routes/users/signIn"));
+app.use("/users/sign-up", require("./routes/users/signUp"));
+app.use("/users/authenticate", require("./routes/users/authenticate"));
 app.use("/verify", require("./routes/verify"));
 app.use("/request-password-reset", require("./routes/requestPasswordReset"));
 app.use("/reset-password", require("./routes/resetPassword"));

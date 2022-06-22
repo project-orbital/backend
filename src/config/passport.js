@@ -1,35 +1,29 @@
+const fs = require("fs");
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
 const User = require("../models/user");
-const bcrypt = require("bcryptjs");
-const LocalStrategy = require("passport-local").Strategy;
 
-module.exports = function (passport) {
+const PUBLIC_KEY = fs.readFileSync(process.env.JWT_PUBLIC_KEY_PATH, "utf8");
+
+const options = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: PUBLIC_KEY,
+    algorithms: ["RS256"],
+};
+
+module.exports = (passport) => {
     passport.use(
-        new LocalStrategy((username, password, done) => {
-            User.findOne({ username: username }, (err, user) => {
-                if (err) throw err;
-                if (!user) return done(null, false);
-                bcrypt.compare(password, user.password, (err, result) => {
-                    if (err) throw err;
-                    if (result === true) {
-                        return done(null, user);
-                    } else {
-                        return done(null, false);
-                    }
-                });
+        new JwtStrategy(options, function (jwt_payload, done) {
+            User.findOne({ _id: jwt_payload.sub }, function (err, user) {
+                if (err) {
+                    return done(err, false);
+                }
+                if (user) {
+                    return done(null, user);
+                } else {
+                    return done(null, false);
+                }
             });
         })
     );
-
-    passport.serializeUser((user, callback) => {
-        callback(null, user.id);
-    });
-
-    passport.deserializeUser((id, callback) => {
-        User.findOne({ _id: id }, (err, user) => {
-            const userInformation = {
-                username: user.username,
-            };
-            callback(err, userInformation);
-        });
-    });
 };
