@@ -1,4 +1,5 @@
 # Backend
+
 [![CI](https://github.com/project-orbital/backend/actions/workflows/node.js.yml/badge.svg)](https://github.com/project-orbital/backend/actions/workflows/node.js.yml)
 
 This repository contains the backend of our application, DollarPlanner.
@@ -15,10 +16,12 @@ not been merged.
 ## Developer Setup
 
 ### System requirements
+
 1. [Node.js](https://nodejs.dev/download/) 18.0.0 or higher
 2. [MongoDB](https://www.mongodb.com/) Cloud account
 
 ### Setting up your local environment
+
 1. Clone the repository to your local machine.
 
     ```
