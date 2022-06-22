@@ -1,4 +1,4 @@
-const pdf = require('pdf-parse');
+const pdf = require("pdf-parse");
 
 /**
  * Asynchronously extracts text from each PDF file in an array.
@@ -8,7 +8,7 @@ const pdf = require('pdf-parse');
  */
 async function extract(files) {
     return await Promise.all(
-        files.map(file => pdf(file.buffer).then(data => data.text))
+        files.map((file) => pdf(file.buffer).then((data) => data.text))
     );
 }
 
