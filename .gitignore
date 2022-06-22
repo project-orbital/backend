@@ -1,5 +1,6 @@
 .idea
 .DS_Store
+*.pem
 
 # ===
 # https://github.com/expressjs/express/blob/master/.gitignore
