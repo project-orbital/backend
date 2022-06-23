@@ -11,8 +11,9 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@googleapis/docs": "^0.4.2",
+        "@googleapis/docs": "^1.0.1",
         "bcryptjs": "^2.4.3",
+        "body-parser": "^1.20.0",
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
         "dotenv": "^16.0.1",
@@ -23,7 +24,7 @@
         "multer": "^1.4.5-lts.1",
         "nodemailer": "^6.7.5",
         "nodemon": "^2.0.16",
-        "passport": "^0.5.3",
+        "passport": "^0.6.0",
         "passport-jwt": "^4.0.0",
         "pdf-parse": "^1.1.1",
         "uuid": "^8.3.2"
