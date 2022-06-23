@@ -10,8 +10,8 @@ const PRIVATE_KEY = fs.readFileSync(process.env.JWT_PRIVATE_KEY_PATH, "utf8");
  * @param {string} password the plaintext password
  * @returns {string} the hashed password
  */
-function hashPassword(password) {
-    return bcrypt.hashSync(password, 22);
+async function hashPassword(password) {
+    return await bcrypt.hash(password, 12);
 }
 
 /**
@@ -21,8 +21,8 @@ function hashPassword(password) {
  * @param {string} hash the hash stored in the database
  * @returns {boolean} `true` if the password is valid, `false` otherwise
  */
-function validatePassword(password, hash) {
-    return bcrypt.compareSync(password, hash);
+async function validatePassword(password, hash) {
+    return await bcrypt.compare(password, hash);
 }
 
 /**
@@ -39,10 +39,7 @@ function issueJWT(user) {
         expiresIn: expiresIn,
         algorithm: "RS256",
     });
-    return {
-        token: "Bearer " + signedToken,
-        expires: expiresIn,
-    };
+    return "Bearer " + signedToken;
 }
 
 module.exports.validatePassword = validatePassword;
