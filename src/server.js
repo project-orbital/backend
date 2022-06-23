@@ -1,5 +1,6 @@
 const express = require("express");
 const passport = require("passport");
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 // Setup
@@ -18,6 +19,7 @@ app.use(
         credentials: true,
     })
 );
+app.use(cookieParser());
 app.use(passport.initialize());
 
 // Routes
