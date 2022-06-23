@@ -5,26 +5,44 @@ const { validatePassword, issueJWT } = require("../../utils/crypto");
 
 router.post("/", (req, res, next) => {
     User.findOne({ username: req.body.username })
-        .then((user) => {
+        .then(async (user) => {
             if (!user) {
-                return res
-                    .status(401)
-                    .json({ message: "User does not exist." });
-            }
-            const isValid = validatePassword(req.body.password, user.password);
-            if (isValid) {
-                const tokenObject = issueJWT(user);
-                res.json({
-                    token: tokenObject.token,
-                    expiresIn: tokenObject.expires,
+                return res.status(401).json({
+                    cause: "user",
+                    reason: "User does not exist.",
+                    resolution:
+                        "Please re-enter your credentials and try again.",
                 });
+            }
+            const isValid = await validatePassword(
+                req.body.password,
+                user.password
+            );
+            if (isValid) {
+                const token = issueJWT(user);
+                res.cookie("jwt", token, {
+                    expires: new Date(Date.now() + 24 * 3600000), // cookie will be removed after 1 day
+                    httpOnly: true,
+                    sameSite: "strict",
+                }).send();
             } else {
                 res.status(401).json({
-                    message: "Incorrect username/password.",
+                    cause: "credentials",
+                    reason: "Incorrect username/password.",
+                    resolution:
+                        "Please re-enter your credentials and try again.",
                 });
             }
         })
-        .catch((err) => next(err));
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json({
+                cause: "unknown",
+                reason: "An error occurred signing up.",
+                resolution: "Please try again.",
+            });
+            next(err);
+        });
 });
 
 module.exports = router;

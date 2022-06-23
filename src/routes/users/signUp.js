@@ -6,13 +6,13 @@ const transporter = require("../../utils/nodemailer");
 const User = require("../../models/user");
 const UserVerification = require("../../models/userVerification");
 
-const registerUser = (req) => {
+const registerUser = async (req) => {
     const newUser = new User({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
         username: req.body.username,
-        password: hashPassword(req.body.password),
+        password: await hashPassword(req.body.password),
         verified: false,
     });
     return newUser.save().then(({ _id, email }) => {
@@ -24,12 +24,12 @@ const registerUser = (req) => {
             subject: "Verify your Email with DollarPlanner",
             html: `<p>Verify your email address to complete the signup and login to your account.</p>
                 <p>This link expires in 6 hours.</p>
-                <p>Click <a href=${uniqueLink}>here</a> to verify.</p>`,
+                <p>Click <a href="${uniqueLink}">here</a> to verify.</p>`,
         };
-        return transporter.sendMail(mailOptions).then(() => {
+        return transporter.sendMail(mailOptions).then(async () => {
             const newVerification = new UserVerification({
                 userId: _id,
-                uniqueString: hashPassword(uniqueString),
+                uniqueString: await hashPassword(uniqueString),
                 dateCreated: Date.now(),
                 dateExpired: Date.now() + 2160000,
             });
@@ -43,28 +43,29 @@ router.post("/", (req, res) => {
         if (user) {
             if (user.verified) {
                 res.status(409).send({
-                    message: "That email address is already in use.",
+                    cause: "email",
+                    reason: "That email address is already in use.",
+                    resolution: "Please use a different email address.",
                 });
             } else {
                 res.status(401).send({
-                    message:
-                        "That email address is registered, but not verified. Please check your email to verify your account.",
+                    cause: "email",
+                    reason: "That email address is registered, but not verified. Please check your email to verify your account.",
+                    resolution:
+                        "Please check your email to verify your account.",
                 });
             }
         } else {
             registerUser(req)
                 .then(() => {
-                    res.json({
-                        message:
-                            "Account registered successfully. Please check your email to verify your account.",
-                    });
+                    res.send("Please check your email to verify your account.");
                 })
                 .catch((err) => {
                     console.log(err);
                     res.status(500).json({
-                        error: err,
-                        message:
-                            "An error occurred while signing up. Please try again.",
+                        cause: "unknown",
+                        reason: "An error occurred signing up.",
+                        resolution: "Please try again.",
                     });
                 });
         }
