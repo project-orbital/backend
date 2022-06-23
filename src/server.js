@@ -24,6 +24,7 @@ app.use(passport.initialize());
 
 // Routes
 app.use("/users/sign-in", require("./routes/users/signIn"));
+app.use("/users/sign-out", require("./routes/users/signOut"));
 app.use("/users/sign-up", require("./routes/users/signUp"));
 app.use("/users/authenticate", require("./routes/users/authenticate"));
 app.use("/verify", require("./routes/verify"));
