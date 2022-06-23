@@ -5,8 +5,14 @@ const User = require("../models/user");
 
 const PUBLIC_KEY = fs.readFileSync(process.env.JWT_PUBLIC_KEY_PATH, "utf8");
 
+function cookieExtractor(req) {
+    let token = null;
+    if (req && req.cookies) token = req.cookies["jwt"];
+    return token;
+}
+
 const options = {
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
     secretOrKey: PUBLIC_KEY,
     algorithms: ["RS256"],
 };

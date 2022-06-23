@@ -35,11 +35,10 @@ function issueJWT(user) {
         sub: _id,
         iat: Date.now(),
     };
-    const signedToken = jsonwebtoken.sign(payload, PRIVATE_KEY, {
+    return jsonwebtoken.sign(payload, PRIVATE_KEY, {
         expiresIn: expiresIn,
         algorithm: "RS256",
     });
-    return "Bearer " + signedToken;
 }
 
 module.exports.validatePassword = validatePassword;
