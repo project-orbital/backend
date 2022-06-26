@@ -8,7 +8,9 @@ const UserVerification = require("../../models/userVerification");
 
 router.post("/", async (req, res) => {
     try {
-        const user = await User.findOne({ email: req.body.email });
+        const user = await User.findOne({
+            $or: [{ email: req.body.email }, { username: req.body.username }],
+        });
         // If the user doesn't exist, then we can go ahead with registration.
         if (!user) {
             await register(
@@ -22,6 +24,13 @@ router.post("/", async (req, res) => {
                 })
             );
             return res.send("Please check your email to verify your account.");
+        }
+        if (user.username === req.body.username) {
+            return res.status(409).json({
+                cause: "username",
+                reason: "That username is already taken.",
+                resolution: "Please choose a different username.",
+            });
         }
         if (user.verified) {
             return res.status(409).send({
