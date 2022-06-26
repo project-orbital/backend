@@ -46,7 +46,11 @@ router.post("/", (req, res) => {
                     html: `
                     <p>This link expires in 60 minutes.</p>
                     <p>Click <a href = "${
-                        currentUrl + "reset-password/" + _id + "/" + resetString
+                        currentUrl +
+                        "/reset-password/" +
+                        _id +
+                        "/" +
+                        resetString
                     }">here</a> to reset your password.</p>`,
                 };
 
