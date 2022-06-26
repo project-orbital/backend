@@ -4,6 +4,10 @@ files:
   - source: .
     destination: ~/backend
 hooks:
+  ApplicationStop:
+    - location: scripts/stop_backend_pm2
+      timeout: 300
+      runas: root
   AfterInstall:
     - location: scripts/install_backend_dependencies
       timeout: 300
