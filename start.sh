@@ -12,6 +12,10 @@ cd parser || exit
 wasm-pack build --target nodejs
 echo "Parser compiled."
 
+echo "Installing dependencies..."
+npm install
+echo "Dependencies installed."
+
 if [ $BRANCH = dev ]
 then
   echo "Starting server using nodemon..."
