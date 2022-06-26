@@ -33,7 +33,7 @@ router.post("/", (req, res) => {
 
     const sendResetEmail = ({ _id, email }, res) => {
         const resetString = uuidv4() + _id;
-        const currentUrl = "http://localhost:3000/";
+        const currentUrl = process.env.FRONTEND_URL;
 
         // clear all existing reset records
         PasswordReset.deleteMany({ userId: _id })
