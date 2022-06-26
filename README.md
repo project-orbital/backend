@@ -1,7 +1,7 @@
 # Backend
 
 [![CI](https://github.com/project-orbital/backend/actions/workflows/node.js.yml/badge.svg)](https://github.com/project-orbital/backend/actions/workflows/node.js.yml)
-[![CD](https://github.com/project-orbital/backend/actions/workflows/workflow.yml/badge.svg)](https://github.com/project-orbital/backend/actions/workflows/workflow.yml)
+[![CD](https://github.com/project-orbital/backend/actions/workflows/deploy.yml/badge.svg)](https://github.com/project-orbital/backend/actions/workflows/deploy.yml)
 
 This repository contains the backend of our application, DollarPlanner.
 
