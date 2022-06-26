@@ -1,0 +1,14 @@
+version: 0.0
+os: linux
+files:
+  - source: .
+    destination: ~/backend
+hooks:
+  AfterInstall:
+    - location: scripts/install_backend_dependencies
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: scripts/start_backend_pm2
+      timeout: 300
+      runas: root
