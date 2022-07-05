@@ -2,6 +2,7 @@ const fs = require("fs");
 const jsonwebtoken = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
+const PUBLIC_KEY = fs.readFileSync(process.env.JWT_PUBLIC_KEY_PATH, "utf8");
 const PRIVATE_KEY = fs.readFileSync(process.env.JWT_PRIVATE_KEY_PATH, "utf8");
 
 /**
@@ -41,6 +42,13 @@ function issueJWT(user) {
     });
 }
 
+function readJWT(token) {
+    return jsonwebtoken.verify(token, PUBLIC_KEY, {
+        algorithms: ["RS256"],
+    });
+}
+
 module.exports.validatePassword = validatePassword;
 module.exports.hashPassword = hashPassword;
 module.exports.issueJWT = issueJWT;
+module.exports.readJWT = readJWT;
