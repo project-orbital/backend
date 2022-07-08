@@ -48,7 +48,12 @@ function readJWT(token) {
     });
 }
 
+async function readIDFromRequestWithJWT(req) {
+    return await readJWT(req.cookies.jwt).sub;
+}
+
 module.exports.validatePassword = validatePassword;
 module.exports.hashPassword = hashPassword;
 module.exports.issueJWT = issueJWT;
 module.exports.readJWT = readJWT;
+module.exports.readIDFromRequestWithJWT = readIDFromRequestWithJWT;
