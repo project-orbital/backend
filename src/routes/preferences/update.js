@@ -86,14 +86,29 @@ router.post(
     async (req, res) => {
         try {
             const id = await readIDFromRequestWithJWT(req);
+            // Check that the old password is correct.
+            const { password } = await User.findById(id);
+            const isValid = await validatePassword(
+                req.body.currentPassword,
+                password
+            );
+            if (!isValid) {
+                return res.status(401).json({
+                    currentPassword: "Current password is incorrect.",
+                });
+            }
+            // Validate the new password.
             if (req.body.password.length < 8) {
-                return res
-                    .status(400)
-                    .send("Password must be at least 8 characters.");
+                return res.status(400).json({
+                    password: "Password must be at least 8 characters long.",
+                });
             }
             if (req.body.password !== req.body.confirmPassword) {
-                return res.status(400).send("Passwords do not match.");
+                return res.status(400).json({
+                    confirmPassword: "Passwords must match.",
+                });
             }
+            // Update the password.
             const hash = await hashPassword(req.body.password);
             await User.findOneAndUpdate(
                 { _id: id },
