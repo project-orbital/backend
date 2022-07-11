@@ -25,16 +25,19 @@ app.use(cookieParser());
 app.use(passport.initialize());
 
 // Routes
-app.use("/users/sign-in", require("./routes/users/signIn"));
-app.use("/users/sign-out", require("./routes/users/signOut"));
-app.use("/users/sign-up", require("./routes/users/signUp"));
-app.use("/users/authenticate", require("./routes/users/authenticate"));
-app.use("/users/preferences/", require("./routes/preferences/update"));
+app.use("/users/sign-in", require("./routes/authentication/signIn"));
+app.use("/users/sign-out", require("./routes/authentication/signOut"));
+app.use("/users/sign-up", require("./routes/authentication/signUp"));
+app.use("/users/authenticate", require("./routes/authentication/authenticate"));
+app.use("/users/preferences/", require("./routes/users/preferences"));
 
-app.use("/verify", require("./routes/verify"));
-app.use("/request-password-reset", require("./routes/requestPasswordReset"));
-app.use("/reset-password", require("./routes/resetPassword"));
-app.use("/api/upload", require("./routes/upload"));
+app.use("/verify", require("./routes/authentication/verify"));
+app.use(
+    "/request-password-reset",
+    require("./routes/authentication/requestPasswordReset")
+);
+app.use("/reset-password", require("./routes/authentication/resetPassword"));
+app.use("/api/upload", require("./routes/api/upload"));
 
 // Server
 if (process.env.NODE_ENV === "production") {
