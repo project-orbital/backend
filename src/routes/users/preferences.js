@@ -18,61 +18,7 @@ router.get(
             const { preferences } = await User.findById(id).select(
                 "preferences -_id"
             );
-            console.log(preferences);
             res.status(200).json(preferences);
-        } catch {
-            res.status(500).send("Something went wrong.");
-        }
-    }
-);
-
-// Get profile information
-router.get(
-    "/user-profile",
-    passport.authenticate("jwt", { session: false }, undefined),
-    async (req, res) => {
-        try {
-            const id = await readIDFromRequestWithJWT(req);
-            const profile = await User.findById(id).select(
-                "firstName lastName username email -_id"
-            );
-            res.status(200).json(profile);
-        } catch {
-            res.status(500).send("Something went wrong.");
-        }
-    }
-);
-
-// Set profile information
-// Email change not supported at the moment due to email verification requirements.
-router.patch(
-    "/user-profile",
-    passport.authenticate("jwt", { session: false }, undefined),
-    async (req, res) => {
-        try {
-            const id = await readIDFromRequestWithJWT(req);
-            const { username } = await User.findById(id);
-            console.log(await User.findById(id));
-            // Check that new username is not already in use.
-            if (username !== req.body.username) {
-                const user = await User.findOne({
-                    username: req.body.username,
-                });
-                if (user) {
-                    return res.status(400).json({
-                        username: "Username is already taken.",
-                    });
-                }
-            }
-            // Update the profile as the username is valid.
-            const profile = {
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                username: req.body.username,
-            };
-            await User.findByIdAndUpdate(id, { $set: profile });
-            console.log(await User.findById(id));
-            res.status(200).send("Profile updated successfully.");
         } catch {
             res.status(500).send("Something went wrong.");
         }

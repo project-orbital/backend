@@ -29,7 +29,9 @@ app.use("/users/sign-in", require("./routes/authentication/signIn"));
 app.use("/users/sign-out", require("./routes/authentication/signOut"));
 app.use("/users/sign-up", require("./routes/authentication/signUp"));
 app.use("/users/authenticate", require("./routes/authentication/authenticate"));
-app.use("/users/preferences/", require("./routes/users/preferences"));
+
+app.use("/users/preferences", require("./routes/users/preferences"));
+app.use("/users/profile", require("./routes/users/profile"));
 
 app.use("/verify", require("./routes/authentication/verify"));
 app.use(
