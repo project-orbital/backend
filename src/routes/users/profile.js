@@ -14,7 +14,6 @@ router.get(
             const profile = await User.findById(id).select(
                 "firstName lastName username email -_id"
             );
-            console.log(profile);
             res.status(200).json(profile);
         } catch {
             res.status(500).send("Something went wrong.");
@@ -51,7 +50,7 @@ router.patch(
             await User.findByIdAndUpdate(id, { $set: profile });
             res.status(200).send("Profile updated successfully.");
         } catch {
-            res.status(500).send("Something went wrong.");
+            res.status(500).send({ unknown: "Something went wrong." });
         }
     }
 );

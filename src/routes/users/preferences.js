@@ -98,7 +98,7 @@ router.post(
             );
             res.status(200).send("Password changed.");
         } catch {
-            res.status(500).send("Something went wrong.");
+            res.status(500).json({ unknown: "Something went wrong." });
         }
     }
 );
@@ -116,12 +116,14 @@ router.delete(
                 password
             );
             if (!isValidPassword) {
-                return res.status(401).send("Incorrect password.");
+                return res.status(401).json({
+                    password: "Incorrect password.",
+                });
             }
             await User.findByIdAndDelete(id);
             res.status(200).send("Account deleted.");
         } catch {
-            res.status(500).send("Something went wrong.");
+            res.status(500).json({ unknown: "Something went wrong." });
         }
     }
 );
@@ -145,7 +147,7 @@ router.delete(
             }
             res.status(200).json("Data erased.");
         } catch {
-            res.status(500).json({ all: "Something went wrong." });
+            res.status(500).json({ unknown: "Something went wrong." });
         }
     }
 );
