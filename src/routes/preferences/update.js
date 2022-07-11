@@ -138,9 +138,32 @@ router.delete(
             }
             await User.findByIdAndDelete(id);
             res.status(200).send("Account deleted.");
-        } catch (e) {
-            console.log(e);
+        } catch {
             res.status(500).send("Something went wrong.");
+        }
+    }
+);
+
+// Erase data
+router.delete(
+    "/erase-data",
+    passport.authenticate("jwt", { session: false }, undefined),
+    async (req, res) => {
+        try {
+            const id = await readIDFromRequestWithJWT(req);
+            const { password } = await User.findById(id);
+            const isValidPassword = await validatePassword(
+                req.get("password"),
+                password
+            );
+            if (!isValidPassword) {
+                return res
+                    .status(401)
+                    .json({ password: "Incorrect password." });
+            }
+            res.status(200).json("Data erased.");
+        } catch {
+            res.status(500).json({ all: "Something went wrong." });
         }
     }
 );
