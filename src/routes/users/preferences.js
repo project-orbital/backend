@@ -43,6 +43,24 @@ router.post(
     }
 );
 
+// Set data storage preference
+router.post(
+    "/data-sync",
+    passport.authenticate("jwt", { session: false }, undefined),
+    async (req, res) => {
+        try {
+            const id = await readIDFromRequestWithJWT(req);
+            const pref = {
+                "preferences.allowsDataStorage": req.body.allowsDataStorage,
+            };
+            await User.findByIdAndUpdate(id, { $set: pref });
+            res.status(200).send("Data storage preference updated.");
+        } catch {
+            res.status(500).send("Something went wrong.");
+        }
+    }
+);
+
 // Set account password
 router.post(
     "/change-password",
