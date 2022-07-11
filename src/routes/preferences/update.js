@@ -8,6 +8,24 @@ const {
 } = require("../../utils/crypto");
 const passport = require("passport");
 
+// Get user preferences
+router.get(
+    "/",
+    passport.authenticate("jwt", { session: false }, undefined),
+    async (req, res) => {
+        try {
+            const id = await readIDFromRequestWithJWT(req);
+            const { preferences } = await User.findById(id).select(
+                "preferences -_id"
+            );
+            console.log(preferences);
+            res.status(200).json(preferences);
+        } catch {
+            res.status(500).send("Something went wrong.");
+        }
+    }
+);
+
 // Get profile information
 router.get(
     "/user-profile",
