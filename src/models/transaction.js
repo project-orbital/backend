@@ -4,10 +4,10 @@ const transactionSchema = new mongoose.Schema({
     account_id: mongoose.Schema.Types.ObjectId,
     createdAt: Date,
     date: Date,
-    amount: Number,
-    balance: Number,
+    amount: mongoose.Schema.Types.Decimal128,
+    balance: mongoose.Schema.Types.Decimal128,
+    category: String,
     description: String,
 });
 
-module.exports.TransactionSchema = transactionSchema;
-module.exports.Transaction = mongoose.model("Transaction", transactionSchema);
+module.exports = mongoose.model("Transaction", transactionSchema);
