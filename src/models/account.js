@@ -1,12 +1,9 @@
 const mongoose = require("mongoose");
-const TransactionSchema = require("./transaction").TransactionSchema;
-
 const accountSchema = new mongoose.Schema({
+    user_id: mongoose.Schema.Types.ObjectId,
+    createdAt: Date,
     name: String,
     nickname: String,
-    transactions: [TransactionSchema],
-    createdAt: Date,
 });
 
-module.exports.AccountSchema = accountSchema;
-module.exports.Account = mongoose.model("Account", accountSchema);
+module.exports = mongoose.model("Account", accountSchema);
