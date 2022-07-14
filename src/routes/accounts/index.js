@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Account = require("../../models/account");
+const Transaction = require("../../models/transaction");
 const { readIDFromRequestWithJWT } = require("../../utils/crypto");
 const passport = require("passport");
 
@@ -111,6 +112,11 @@ router.delete(
                     .status(404)
                     .json({ message: "Account does not exist." });
             }
+            // Delete all transactions of the account.
+            await Transaction.deleteMany({
+                user_id: userId,
+                account_id: accountId,
+            });
             await Account.findOneAndDelete({ _id: accountId, user_id: userId });
             res.status(200).json({ title: "Account deleted." });
         } catch {
