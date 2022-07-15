@@ -8,53 +8,17 @@ const {
 } = require("../../utils/crypto");
 const passport = require("passport");
 
-// Get profile information
+// Get user preferences
 router.get(
-    "/user-profile",
+    "/",
     passport.authenticate("jwt", { session: false }, undefined),
     async (req, res) => {
         try {
             const id = await readIDFromRequestWithJWT(req);
-            const profile = await User.findById(id).select(
-                "firstName lastName username email -_id"
+            const { preferences } = await User.findById(id).select(
+                "preferences -_id"
             );
-            res.status(200).json(profile);
-        } catch {
-            res.status(500).send("Something went wrong.");
-        }
-    }
-);
-
-// Set profile information
-// Email change not supported at the moment due to email verification requirements.
-router.patch(
-    "/user-profile",
-    passport.authenticate("jwt", { session: false }, undefined),
-    async (req, res) => {
-        try {
-            const id = await readIDFromRequestWithJWT(req);
-            const { username } = await User.findById(id);
-            console.log(await User.findById(id));
-            // Check that new username is not already in use.
-            if (username !== req.body.username) {
-                const user = await User.findOne({
-                    username: req.body.username,
-                });
-                if (user) {
-                    return res.status(400).json({
-                        username: "Username is already taken.",
-                    });
-                }
-            }
-            // Update the profile as the username is valid.
-            const profile = {
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                username: req.body.username,
-            };
-            await User.findByIdAndUpdate(id, { $set: profile });
-            console.log(await User.findById(id));
-            res.status(200).send("Profile updated successfully.");
+            res.status(200).json(preferences);
         } catch {
             res.status(500).send("Something went wrong.");
         }
@@ -73,6 +37,24 @@ router.post(
             };
             await User.findOneAndUpdate({ _id: id }, { $set: pref });
             res.status(200).send("Dark mode preference updated.");
+        } catch {
+            res.status(500).send("Something went wrong.");
+        }
+    }
+);
+
+// Set data storage preference
+router.post(
+    "/data-sync",
+    passport.authenticate("jwt", { session: false }, undefined),
+    async (req, res) => {
+        try {
+            const id = await readIDFromRequestWithJWT(req);
+            const pref = {
+                "preferences.allowsDataStorage": req.body.allowsDataStorage,
+            };
+            await User.findByIdAndUpdate(id, { $set: pref });
+            res.status(200).send("Data storage preference updated.");
         } catch {
             res.status(500).send("Something went wrong.");
         }
@@ -116,7 +98,7 @@ router.post(
             );
             res.status(200).send("Password changed.");
         } catch {
-            res.status(500).send("Something went wrong.");
+            res.status(500).json({ unknown: "Something went wrong." });
         }
     }
 );
@@ -134,13 +116,38 @@ router.delete(
                 password
             );
             if (!isValidPassword) {
-                return res.status(401).send("Incorrect password.");
+                return res.status(401).json({
+                    password: "Incorrect password.",
+                });
             }
             await User.findByIdAndDelete(id);
             res.status(200).send("Account deleted.");
-        } catch (e) {
-            console.log(e);
-            res.status(500).send("Something went wrong.");
+        } catch {
+            res.status(500).json({ unknown: "Something went wrong." });
+        }
+    }
+);
+
+// Erase data
+router.delete(
+    "/erase-data",
+    passport.authenticate("jwt", { session: false }, undefined),
+    async (req, res) => {
+        try {
+            const id = await readIDFromRequestWithJWT(req);
+            const { password } = await User.findById(id);
+            const isValidPassword = await validatePassword(
+                req.get("password"),
+                password
+            );
+            if (!isValidPassword) {
+                return res
+                    .status(401)
+                    .json({ password: "Incorrect password." });
+            }
+            res.status(200).json("Data erased.");
+        } catch {
+            res.status(500).json({ unknown: "Something went wrong." });
         }
     }
 );
