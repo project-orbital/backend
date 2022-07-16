@@ -60,7 +60,7 @@ router.get(
                     .status(404)
                     .json({ message: "Transaction does not exist." });
             }
-            res.status(200).json(transactionId);
+            res.status(200).json(transaction);
         } catch {
             res.status(500).json({ message: "Something went wrong." });
         }
@@ -102,16 +102,11 @@ router.put(
         try {
             const transactionId = req.params.transactionId;
             const userId = await readIDFromRequestWithJWT(req);
-            const transaction = await Transaction.findOneAndUpdate({
-                id: transactionId,
-                user_id: userId,
-                account_id: req.body.accountId,
-                date: req.body.date,
-                amount: req.body.amount,
-                balance: req.body.balance,
-                category: req.body.category,
-                description: req.body.description,
-            });
+            const transaction = await Transaction.findOneAndUpdate(
+                { _id: transactionId, user_id: userId },
+                req.body,
+                { new: true }
+            );
             if (!transaction) {
                 return res
                     .status(404)
