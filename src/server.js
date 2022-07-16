@@ -33,6 +33,9 @@ app.use("/users/authenticate", require("./routes/authentication/authenticate"));
 app.use("/users/preferences", require("./routes/users/preferences"));
 app.use("/users/profile", require("./routes/users/profile"));
 
+app.use("/accounts", require("./routes/accounts/"));
+app.use("/transactions", require("./routes/transactions/"));
+
 app.use("/verify", require("./routes/authentication/verify"));
 app.use(
     "/request-password-reset",
