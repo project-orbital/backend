@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const contributionschema = new mongoose.Schema({
-    user_id: mongoose.Schema.Types.ObjectId,
+    username: String,
     header: String,
     summary: String,
     link: String,

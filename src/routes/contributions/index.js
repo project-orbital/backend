@@ -3,6 +3,7 @@ const router = express.Router();
 const Contribution = require("../../models/contribution");
 const { readIDFromRequestWithJWT } = require("../../utils/crypto");
 const passport = require("passport");
+const user = require("../../models/user");
 
 // Create an account for a user.
 router.post(
@@ -11,8 +12,10 @@ router.post(
     async (req, res) => {
         try {
             const id = await readIDFromRequestWithJWT(req);
+            //find the id specific username
+            const { username } = await user.findById(id);
             const contribution = await new Contribution({
-                user_id: id,
+                username: username,
                 header: req.body.header,
                 summary: req.body.summary,
                 link: req.body.link,
