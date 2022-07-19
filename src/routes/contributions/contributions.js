@@ -12,7 +12,6 @@ router.get(
     async (req, res) => {
         try {
             await readIDFromRequestWithJWT(req);
-            //check if the current user has reported
             const contributions = (await Contribution.find()) ?? [];
             res.status(200).json(contributions);
         } catch {

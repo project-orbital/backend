@@ -4,7 +4,7 @@ const passport = require("passport");
 const User = require("../../models/user");
 const { readIDFromRequestWithJWT } = require("../../utils/crypto");
 
-// Get contributions reported by a particular user.
+// Retrieve an array of contributions reported by the user.
 router.get(
     "/",
     passport.authenticate("jwt", { session: false }, undefined),
