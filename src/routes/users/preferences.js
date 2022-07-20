@@ -114,18 +114,23 @@ router.delete(
             const id = await readIDFromRequestWithJWT(req);
             const { password } = await User.findById(id);
             const isValidPassword = await validatePassword(
-                req.body.password,
+                req.get("password"),
                 password
             );
             if (!isValidPassword) {
                 return res.status(401).json({
                     password: "Incorrect password.",
+                    title: "Incorrect password.",
+                    description: "Please enter your password again.",
                 });
             }
             await User.findByIdAndDelete(id);
             res.status(200).send("Account deleted.");
         } catch {
-            res.status(500).json({ unknown: "Something went wrong." });
+            res.status(500).json({
+                title: "Something went wrong.",
+                unknown: "Please try again.",
+            });
         }
     }
 );
