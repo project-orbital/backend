@@ -3,7 +3,7 @@ const router = express.Router();
 const { readIDFromRequestWithJWT } = require("../../utils/crypto");
 const passport = require("passport");
 const user = require("../../models/user");
-const Contribution = require("../../models/contribution/contribution");
+const Contribution = require("../../models/contribution");
 
 // Create a contribution.
 router.post(
