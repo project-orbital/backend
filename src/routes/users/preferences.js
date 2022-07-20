@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../../models/user");
+const Account = require("../../models/account");
+const Transaction = require("../../models/transaction");
 const {
     readIDFromRequestWithJWT,
     hashPassword,
@@ -141,13 +143,20 @@ router.delete(
                 password
             );
             if (!isValidPassword) {
-                return res
-                    .status(401)
-                    .json({ password: "Incorrect password." });
+                return res.status(401).json({
+                    password: "Incorrect password.",
+                    title: "Incorrect password.",
+                    description: "Please enter your password again.",
+                });
             }
+            await Transaction.deleteMany({ user_id: id });
+            await Account.deleteMany({ user_id: id });
             res.status(200).json("Data erased.");
         } catch {
-            res.status(500).json({ unknown: "Something went wrong." });
+            res.status(500).json({
+                title: "Something went wrong.",
+                unknown: "Please try again.",
+            });
         }
     }
 );
