@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const Account = require("../../models/account");
-const Transaction = require("../../models/transaction");
-const { readIDFromRequestWithJWT } = require("../../utils/crypto");
+const Account = require("../models/account");
+const Transaction = require("../models/transaction");
+const { readIDFromRequestWithJWT } = require("../utils/crypto");
 const passport = require("passport");
 
 // Create a transaction for a specific user and account.
