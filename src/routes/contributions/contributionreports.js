@@ -12,6 +12,7 @@ router.get(
         try {
             const id = await readIDFromRequestWithJWT(req);
             const { reportedContributions } = await User.findById(id);
+
             res.status(200).json(reportedContributions);
         } catch {
             res.status(500).json({

@@ -49,4 +49,32 @@ router.put(
     }
 );
 
+//Update contribution with user who liked it and like count.
+router.put(
+    "/like/:id",
+    passport.authenticate("jwt", { session: false }, undefined),
+    async (req, res) => {
+        try {
+            const UserId = await readIDFromRequestWithJWT(req);
+            const contributionId = req.params.id;
+            await Contribution.findByIdAndUpdate(contributionId, {
+                $push: {
+                    likedBy: UserId,
+                },
+            });
+            await User.findByIdAndUpdate(UserId, {
+                $push: {
+                    likedContributions: contributionId,
+                },
+            });
+            res.status(200).send("Contribution reported successfully.");
+        } catch {
+            res.status(500).send({
+                title: "Something went wrong.",
+                description: "Please try again.",
+            });
+        }
+    }
+);
+
 module.exports = router;
