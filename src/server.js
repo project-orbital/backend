@@ -47,6 +47,8 @@ app.use(
     require("./routes/contributions/contributionreports")
 );
 
+app.use("/budget", require("./routes/budgets"));
+
 app.use("/verify", require("./routes/authentication/verify"));
 app.use(
     "/request-password-reset",
