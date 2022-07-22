@@ -122,7 +122,7 @@ router.delete(
                     .status(404)
                     .json({ message: "Liability does not exist." });
             }
-            await liability.findOneAndDelete({
+            await Liability.findOneAndDelete({
                 _id: liabilityId,
                 user_id: userId,
             });
