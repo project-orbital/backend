@@ -36,6 +36,12 @@ app.use("/users/profile", require("./routes/users/profile"));
 app.use("/accounts", require("./routes/accounts"));
 app.use("/transactions", require("./routes/transactions"));
 
+// Portfolio routes
+app.use("/assets", require("./routes/portfolio/assets"));
+app.use("/liabilities", require("./routes/portfolio/liabilities"));
+app.use("/orders", require("./routes/portfolio/orders"));
+app.use("/payments", require("./routes/portfolio/payments"));
+
 app.use("/learn", require("./routes/contributions/contributions"));
 app.use("/learn/contribute", require("./routes/contributions/contribute"));
 app.use(
