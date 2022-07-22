@@ -5,6 +5,7 @@ const liabilitySchema = new mongoose.Schema(
         createdAt: Date,
         name: String,
         description: String,
+        category: String,
         amount: mongoose.Schema.Types.Decimal128,
         interest: mongoose.Schema.Types.Decimal128,
     },

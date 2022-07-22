@@ -23,6 +23,7 @@ router.post(
                 createdAt: new Date(),
                 name: req.body.name,
                 symbol: req.body.symbol,
+                category: req.body.category,
                 price: req.body.price,
                 yield: req.body.yield,
             }).save();

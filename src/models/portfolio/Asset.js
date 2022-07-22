@@ -4,6 +4,7 @@ const assetSchema = new mongoose.Schema({
     createdAt: Date,
     name: String,
     symbol: String,
+    category: String,
     price: mongoose.Schema.Types.Decimal128,
     yield: mongoose.Schema.Types.Decimal128,
 });
