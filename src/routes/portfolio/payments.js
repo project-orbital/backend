@@ -33,6 +33,7 @@ router.post(
                 user_id: userId,
                 liability_id: liabilityId,
                 createdAt: new Date(),
+                date: req.body.date,
                 amount: req.body.amount,
             }).save();
             res.status(200).json(payment);

@@ -33,6 +33,7 @@ router.post(
                 user_id: userId,
                 asset_id: assetId,
                 createdAt: new Date(),
+                date: req.body.date,
                 amount: req.body.amount,
                 price: req.body.price,
                 fee: req.body.fee,
