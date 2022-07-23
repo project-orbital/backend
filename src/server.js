@@ -25,14 +25,43 @@ app.use(cookieParser());
 app.use(passport.initialize());
 
 // Routes
-app.use("/users/sign-in", require("./routes/users/signIn"));
-app.use("/users/sign-out", require("./routes/users/signOut"));
-app.use("/users/sign-up", require("./routes/users/signUp"));
-app.use("/users/authenticate", require("./routes/users/authenticate"));
-app.use("/verify", require("./routes/verify"));
-app.use("/request-password-reset", require("./routes/requestPasswordReset"));
-app.use("/reset-password", require("./routes/resetPassword"));
-app.use("/api/upload", require("./routes/upload"));
+app.use("/users/sign-in", require("./routes/authentication/signIn"));
+app.use("/users/sign-out", require("./routes/authentication/signOut"));
+app.use("/users/sign-up", require("./routes/authentication/signUp"));
+app.use("/users/authenticate", require("./routes/authentication/authenticate"));
+
+app.use("/users/preferences", require("./routes/users/preferences"));
+app.use("/users/profile", require("./routes/users/profile"));
+
+app.use("/accounts", require("./routes/accounts"));
+app.use("/transactions", require("./routes/transactions"));
+
+// Portfolio routes
+app.use("/assets", require("./routes/portfolio/assets"));
+app.use("/liabilities", require("./routes/portfolio/liabilities"));
+app.use("/orders", require("./routes/portfolio/orders"));
+app.use("/payments", require("./routes/portfolio/payments"));
+
+app.use("/learn", require("./routes/contributions/contributions"));
+app.use("/learn/contribute", require("./routes/contributions/contribute"));
+app.use(
+    "/learn/reactions/likes",
+    require("./routes/contributions/contributionlikes")
+);
+app.use(
+    "/learn/reactions/reports",
+    require("./routes/contributions/contributionreports")
+);
+
+app.use("/budget", require("./routes/budgets"));
+
+app.use("/verify", require("./routes/authentication/verify"));
+app.use(
+    "/request-password-reset",
+    require("./routes/authentication/requestPasswordReset")
+);
+app.use("/reset-password", require("./routes/authentication/resetPassword"));
+app.use("/api/upload", require("./routes/api/upload"));
 
 // Server
 if (process.env.NODE_ENV === "production") {

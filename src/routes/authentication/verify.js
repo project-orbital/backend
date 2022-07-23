@@ -1,6 +1,6 @@
 // verify email
-const UserVerification = require("../models/userVerification");
-const User = require("../models/user");
+const UserVerification = require("../../models/userVerification");
+const User = require("../../models/user");
 const bcrypt = require("bcryptjs");
 const express = require("express");
 const router = express.Router();

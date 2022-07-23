@@ -1,10 +1,10 @@
 const express = require("express");
-const User = require("../models/user");
+const User = require("../../models/user");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcryptjs");
-const PasswordReset = require("../models/passwordReset");
+const PasswordReset = require("../../models/passwordReset");
 const router = express.Router();
-const transporter = require("../utils/nodemailer");
+const transporter = require("../../utils/nodemailer");
 
 router.post("/", (req, res) => {
     const email = req.body.email;
