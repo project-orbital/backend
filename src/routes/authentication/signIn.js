@@ -9,17 +9,17 @@ router.post("/", async (req, res, next) => {
         // Check that the user exists in the database.
         if (!user) {
             return res.status(401).json({
-                cause: "username",
-                reason: "Account does not exist.",
+                cause: "credentials",
+                reason: "Incorrect username/password.",
                 resolution: "Please re-enter your credentials and try again.",
             });
         }
         // Check that the user's email is verified.
         if (!user.verified) {
             return res.status(401).json({
-                cause: "verification",
-                reason: "Account not verified.",
-                resolution: "Please check your email to verify your account.",
+                cause: "credentials",
+                reason: "Incorrect username/password.",
+                resolution: "Please re-enter your credentials and try again.",
             });
         }
         // Check that the user's hashed password matches the hash of the given password.
