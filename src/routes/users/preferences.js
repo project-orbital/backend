@@ -2,6 +2,12 @@ const express = require("express");
 const router = express.Router();
 const User = require("../../models/user");
 const Account = require("../../models/account");
+const Budget = require("../../models/budget");
+const Contribution = require("../../models/contribution");
+const Asset = require("../../models/portfolio/Asset");
+const Liability = require("../../models/portfolio/Liability");
+const Order = require("../../models/portfolio/Order");
+const Payment = require("../../models/portfolio/Payment");
 const Transaction = require("../../models/transaction");
 const {
     readIDFromRequestWithJWT,
@@ -124,7 +130,16 @@ router.delete(
                     description: "Please enter your password again.",
                 });
             }
+            const { username } = await User.findById(id).select("username");
             await User.findByIdAndDelete(id);
+            await Transaction.deleteMany({ user_id: id });
+            await Budget.deleteMany({ user_id: id });
+            await Contribution.deleteMany({ username: username });
+            await Account.deleteMany({ user_id: id });
+            await Asset.deleteMany({ user_id: id });
+            await Liability.deleteMany({ user_id: id });
+            await Order.deleteMany({ user_id: id });
+            await Payment.deleteMany({ user_id: id });
             res.status(200).send("Account deleted.");
         } catch {
             res.status(500).json({
@@ -154,8 +169,15 @@ router.delete(
                     description: "Please enter your password again.",
                 });
             }
+            const { username } = await User.findById(id).select("username");
             await Transaction.deleteMany({ user_id: id });
             await Account.deleteMany({ user_id: id });
+            await Budget.deleteMany({ user_id: id });
+            await Contribution.deleteMany({ username: username });
+            await Asset.deleteMany({ user_id: id });
+            await Liability.deleteMany({ user_id: id });
+            await Order.deleteMany({ user_id: id });
+            await Payment.deleteMany({ user_id: id });
             res.status(200).json("Data erased.");
         } catch {
             res.status(500).json({
