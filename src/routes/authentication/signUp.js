@@ -61,13 +61,10 @@ async function register(user) {
     const mailOptions = {
         from: process.env.AUTH_EMAIL,
         to: email,
-        subject: "Verify your account — DollarPlanner",
-        html: `
-            <p>Thanks for signing up with DollarPlanner!</p>
-            <p>Please click <a href="${uniqueLink}">here</a> to verify your account.</p>
-            <p>This link will expire in 6 hours.</p>
-            <p>This is an automatically generated message. Please do not reply to this email.</p>
-        `,
+        subject: "Verify your Email with DollarPlanner",
+        html: `<p>Verify your email address to complete the signup and login to your account.</p>
+                <p>This link expires in 6 hours.</p>
+                <p>Click <a href="${uniqueLink}">here</a> to verify.</p>`,
     };
     await transporter.sendMail(mailOptions);
     const newVerification = new UserVerification({
