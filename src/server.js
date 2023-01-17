@@ -64,7 +64,7 @@ app.use("/reset-password", require("./routes/authentication/resetPassword"));
 app.use("/api/upload", require("./routes/api/upload"));
 
 // Server
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV !== "production") {
     const privateKey = fs.readFileSync(process.env.PRIVATE_KEY_PATH, "utf8");
     const certificate = fs.readFileSync(process.env.CERTIFICATE_PATH, "utf8");
     const ca = fs.readFileSync(process.env.CHAIN_PATH, "utf8");
