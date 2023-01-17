@@ -7,14 +7,18 @@ git submodule foreach git checkout $BRANCH
 git submodule foreach git pull origin $BRANCH
 echo "Git submodules updated."
 
-echo "Compiling parser to .wasm..."
+echo "Entering parser submodule"
 cd parser || exit
+echo "Compiling parser to .wasm..."
 wasm-pack build --target nodejs
 echo "Parser compiled."
 
 echo "Installing dependencies..."
 npm install
 echo "Dependencies installed."
+
+cd ..
+cp ../secrets/.env ./src
 
 if [ $BRANCH = dev ]
 then
